@@ -25,7 +25,7 @@ include("../views/header.php");
             <span class="success-msg"><?= $success ?></span>
         </p>
     <?php endif; ?>
-    <a href="home.php">ホーム画面へ</a>
+    <a href="../views/home.php">ホーム画面へ</a>
     <form class="account-setting-form" action="../controllers/account_update.php" method="post">
         <div>
             <input type="text" name="uName" id="uName" placeholder="ユーザー名" readonly value="<?= $uName ?>">
@@ -35,7 +35,7 @@ include("../views/header.php");
         </div>
         <a href="./account_update.php" class="account-setting-btn" style="color:black;background-color:#f0f0f0; text-decoration: none;">編集</a>
     </form>
-    <a href="../controllers/account_delete.php" style="color: red;">アカウントを削除</a>
+    <a href="../views/account_delete.php" style="color: red;">アカウントを削除</a>
 </div>
 </body>
 

@@ -12,7 +12,7 @@ include("../views/header.php");
 
 <div class="signin-container">
     <h2 class="signin-title">サインイン</h2>
-    <form class="signin-form" action="../controllers/login_user.php" method="post">
+    <form class="signin-form" action="../controllers/sign_in.php" method="post">
         <div>
             <input type="email" name="uMail" id="uMail" placeholder="メールアドレス" required value="<?= $old["uMail"] ?>">
             <!-- エラーメッセージが登録されていれば表示 -->

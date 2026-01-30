@@ -20,7 +20,7 @@ check_session_id();
     <img class="account-icon" src="./default.png" alt="" style="width: 50px;">
     <ul class="dropdown" style="display: none;">
         <li style="list-style: none;">
-            <a href="../controllers/account_setting.php">アカウント設定</a>
+            <a href="../views/account_setting.php">アカウント設定</a>
             <a href="../controllers/sign_out.php">サインアウト</a>
         </li>
     </ul>
