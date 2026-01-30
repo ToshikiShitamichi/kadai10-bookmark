@@ -8,5 +8,5 @@ if (isset($_COOKIE[session_name()])) {
 session_destroy();
 
 // トップ画面に遷移
-header("Location:index.html");
+header("Location:../index.html");
 exit();
