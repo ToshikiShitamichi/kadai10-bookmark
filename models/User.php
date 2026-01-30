@@ -11,11 +11,28 @@ class User
         $this->pdo = connect_db();
     }
 
-    // 同一アドレス検出
+    // 作成時同一アドレス検出
     public function countUser($uMail)
     {
         $sql = 'SELECT count(*) as count FROM users_table WHERE uMail = :uMail';
         $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':uMail', $uMail, PDO::PARAM_STR);
+        try {
+            $status = $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["sql error" => "{$e->getMessage()}"]);
+            exit();
+        }
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $record;
+    }
+
+    // 更新時同一アドレス検出
+    public function sameAddressUser($uId, $uMail)
+    {
+        $sql = 'SELECT count(*) as count FROM users_table WHERE uMail = :uMail AND uId != :uId';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':uId', $uId, PDO::PARAM_INT);
         $stmt->bindValue(':uMail', $uMail, PDO::PARAM_STR);
         try {
             $status = $stmt->execute();
@@ -75,10 +92,34 @@ class User
     }
 
     // 更新
-    public function updateUser() {}
+    public function updateUser($uId, $uName, $uMail)
+    {
+        $sql = 'UPDATE users_table SET uName = :uName, uMail = :uMail, updated_at = now() WHERE uId = :uId';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':uId', $uId, PDO::PARAM_INT);
+        $stmt->bindValue(':uName', $uName, PDO::PARAM_STR);
+        $stmt->bindValue(':uMail', $uMail, PDO::PARAM_STR);
+        try {
+            $status = $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["sql error" => "{$e->getMessage()}"]);
+            exit();
+        }
+    }
 
     // 削除
-    public function deleteUser() {}
+    public function deleteUser($uId)
+    {
+        $sql = 'UPDATE users_table SET deleted_at = now() WHERE uId = :uId';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':uId', $uId, PDO::PARAM_INT);
+        try {
+            $status = $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["sql error" => "{$e->getMessage()}"]);
+            exit();
+        }
+    }
 }
 
 ?>
