@@ -18,7 +18,7 @@ if (!$record) {
     // エラーメッセージを登録
     $_SESSION['errors'] = ['uMail' => 'メールアドレスが正しくありません'];
     // サインイン画面再表示
-    header("Location:sign_in.php");
+    header("Location:../views/sign_in.php");
     exit();
 }
 
@@ -29,7 +29,7 @@ if (!password_verify($password, $record["password"])) {
     // エラーメッセージを登録
     $_SESSION['errors'] = ['password' => 'パスワードが正しくありません'];
     // サインイン画面再表示
-    header("Location:sign_in.php");
+    header("Location:../views/sign_in.php");
     exit();
 }
 

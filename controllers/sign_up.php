@@ -31,7 +31,7 @@ if ($record["count"] === 1) {
         'uMail' => 'このメールアドレスはすでに登録されています。',
     ];
     // サインアップ画面再表示
-    header("Location:./sign_up.php");
+    header("Location:../views/sign_up.php");
     exit();
 }
 
