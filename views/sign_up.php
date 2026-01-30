@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $old = $_SESSION['old'] ?? ['uName' => '', 'uMail' => ''];
 $errors = $_SESSION['errors'] ?? [];
 
@@ -19,7 +21,7 @@ unset($_SESSION['old'], $_SESSION['errors']);
 <body>
     <div class="signup-container">
         <h2 class="signup-title">アカウントを作成</h2>
-        <form class="signup-form" action="./sign_up.php" method="post">
+        <form class="signup-form" action="../controllers/create_user.php" method="post">
             <div>
                 <input type="text" name="uName" id="uName" placeholder="ユーザー名" required value="<?= $old["uName"] ?>">
             </div>
@@ -44,7 +46,6 @@ unset($_SESSION['old'], $_SESSION['errors']);
         </div>
         <span>すでにアカウントをお持ちですか？<a href="./sign_in.php">サインインする</a></span>
     </div>
-
 </body>
 
 </html>
