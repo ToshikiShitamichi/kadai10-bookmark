@@ -36,7 +36,7 @@ include("../views/header.php");
         <a class="signup-btn">Googleで続ける</a>
         <a class="signup-btn">GitHubで続ける</a>
     </div>
-    <span>すでにアカウントをお持ちですか？<a href="../controllers/sign_in.php">サインインする</a></span>
+    <span>すでにアカウントをお持ちですか？<a href="../views/sign_in.php">サインインする</a></span>
 </div>
 </body>
 
