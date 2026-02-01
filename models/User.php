@@ -11,6 +11,27 @@ class User
         $this->pdo = connect_db();
     }
 
+    public function createUser($firebase_uid, $email, $display_name, $photo_url, $provider)
+    {
+        $sql = 'INSERT INTO users(firebase_uid, email, display_name, photo_url, last_provider) VALUES (:firebase_uid,:email,:display_name,:photo_url,:provider) ON DUPLICATE KEY UPDATE email = VALUES(email), display_name = VALUES(display_name), photo_url = VALUES(photo_url), last_provider = VALUES(last_provider)';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':firebase_uid', $firebase_uid, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':display_name', $display_name, PDO::PARAM_STR);
+        $stmt->bindValue(':photo_url', $photo_url, PDO::PARAM_STR);
+        $stmt->bindValue(':provider', $provider, PDO::PARAM_STR);
+        try {
+            $status = $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["sql error" => "{$e->getMessage()}"]);
+            exit();
+        }
+    }
+
+    // 
+    // 旧コード
+    // 
+
     // 作成時同一アドレス検出
     public function countUser($uMail)
     {

@@ -51,6 +51,8 @@
 
     border: 1px solid #000;
     border-radius: 3px;
+
+    cursor: pointer;
 }
 
 .signup-btn-group,
@@ -63,6 +65,12 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
+}
+
+.signup-btn:hover,
+.signin-btn:hover,
+.account-setting-btn:hover {
+    opacity: 0.5;
 }
 
 .success-msg {
