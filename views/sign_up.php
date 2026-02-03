@@ -38,7 +38,7 @@ include("../views/header.php");
         <input type="hidden" name="firebase_uid" id="firebase_uid">
         <input type="hidden" name="email" id="post_email">
         <input type="hidden" name="display_name" id="post_display_name">
-        <input type="hidden" name="photo_url" id="post_photoURL">
+        <input type="hidden" name="photo_url" id="post_photo_url">
         <input type="hidden" name="provider" id="post_provider">
     </form>
 </div>

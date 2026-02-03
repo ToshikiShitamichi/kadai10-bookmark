@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include("../models/User.php");
 $userModel = new User();
 
@@ -11,6 +13,7 @@ $provider = $_POST["provider"];
 
 // SQL実行
 $userModel->createUser($firebase_uid, $email, $display_name, $photo_url, $provider);
+
 // サインインユーザー情報を保持
 $_SESSION['session_id'] = session_id();
 
