@@ -142,6 +142,3 @@ class User
         }
     }
 }
-
-?>
-<script type="module" src="../firebase.js"></script>

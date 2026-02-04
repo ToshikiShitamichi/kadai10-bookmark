@@ -5,42 +5,22 @@ include("../models/User.php");
 $userModel = new User();
 
 //データ取得
-$uMail = $_POST["uMail"];
-$password = $_POST["password"];
+$firebase_uid = $_POST["firebase_uid"];
+$email = $_POST["email"];
+$display_name = $_POST["display_name"];
+$photo_url = $_POST["photo_url"];
+$provider = $_POST["provider"];
 
 // SQL実行
-$record = $userModel->getUser($uMail);
-
-// 同一メールアドレスのレコードが存在しない場合
-if (!$record) {
-    // 入力された情報を保持
-    $_SESSION['old'] = ['uMail' => $uMail];
-    // エラーメッセージを登録
-    $_SESSION['errors'] = ['uMail' => 'メールアドレスが正しくありません'];
-    // サインイン画面再表示
-    header("Location:../views/sign_in.php");
-    exit();
-}
-
-// パスワードが一致しない
-if (!password_verify($password, $record["password"])) {
-    // 入力された情報を保持
-    $_SESSION['old'] = ['uMail' => $uMail];
-    // エラーメッセージを登録
-    $_SESSION['errors'] = ['password' => 'パスワードが正しくありません'];
-    // サインイン画面再表示
-    header("Location:../views/sign_in.php");
-    exit();
-}
+$userModel->createUser($firebase_uid, $email, $display_name, $photo_url, $provider);
 
 // サインインユーザー情報を保持
-$_SESSION['session_id'] = session_id();
-$_SESSION['user'] = [
-    'uId' => $record['uId'],
-    'uName' => $record['uName'],
-    'uMail' => $record['uMail'],
-    'is_admin' => $record['is_admin']
-];
+$_SESSION["session_id"]    = session_id();
+$_SESSION["firebase_uid"]  = $firebase_uid;
+$_SESSION["email"]         = $email;
+$_SESSION["display_name"]  = $display_name;
+$_SESSION["photo_url"]     = $photo_url;
+$_SESSION["provider"]      = $provider;
 
 // ホーム画面に遷移
 header("Location:../views/home.php");

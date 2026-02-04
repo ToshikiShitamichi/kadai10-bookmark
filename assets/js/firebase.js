@@ -48,9 +48,38 @@ $(function () {
             postToPhp(cred.user, "password");
         } catch (err) {
             if (err?.code === "auth/email-already-in-use") {
-                $("#err-mail").css("display", "block");
-                return
+                $("#err-mail").text("すでに登録されているか、別の方法でログイン済みです。");
             }
+            if (err?.code === "auth/invalid-email") {
+                $("#err-mail").text("メールアドレスの形式が正しくありません。");
+            }
+            if (err?.code === "auth/weak-password") {
+                $("#err-mail").text("パスワードが短すぎます（6文字以上）。");
+            }
+            $("#err-mail").css("display", "block");
+            return
+        }
+    });
+
+    // メール/パスワードサインイン
+    $("#mailSignInForm").on("submit", async function (e) {
+        $("#err-mail").css("display", "none");
+
+        e.preventDefault()
+
+        const email = $("#email").val();
+        const password = $("#password").val();
+
+        try {
+            const cred = await signInWithEmailAndPassword(auth, email, password);
+
+            postToPhp(cred.user, "password");
+        } catch (err) {
+            if (err?.code === "auth/invalid-credential") {
+                $("#err-mail").text("メール/パスワードが正しくないか、別の方法でログイン済みです。");
+            }
+            $("#err-mail").css("display", "block");
+            return
         }
     });
 
@@ -61,6 +90,12 @@ $(function () {
             const cred = await signInWithPopup(auth, googleProvider);
             postToPhp(cred.user, "google");
         } catch (err) {
+            if (err?.code === "auth/email-already-in-use") {
+                $("#err-mail").text("すでに登録されているか、別の方法でログイン済みです。");
+            }
+            if (err?.code === "auth/popup-closed-by-user") {
+                $("#err-mail").text("ポップアップが閉じられました。");
+            }
             $("#err-mail").css("display", "block");
             return
         }
@@ -73,6 +108,17 @@ $(function () {
             const cred = await signInWithPopup(auth, githubProvider);
             postToPhp(cred.user, "github");
         } catch (err) {
+            console.log(err);
+            if (err?.code === "auth/account-exists-with-different-credential") {
+                const cred = await signInWithPopup(auth, googleProvider);
+                
+            }
+            if (err?.code === "auth/email-already-in-use") {
+                $("#err-mail").text("すでに登録されているか、別の方法でログイン済みです。");
+            }
+            if (err?.code === "auth/popup-closed-by-user") {
+                $("#err-mail").text("ポップアップが閉じられました。");
+            }
             $("#err-mail").css("display", "block");
             return
         }

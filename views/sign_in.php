@@ -1,45 +1,46 @@
 <?php
 session_start();
-
-$old = $_SESSION['old'] ?? ['uMail' => ''];
-$errors = $_SESSION['errors'] ?? [];
-
-// 取得したセッションのクリア
-unset($_SESSION['old'], $_SESSION['errors']);
-
+if (isset($_SESSION["session_id"]) && $_SESSION["session_id"] === session_id()) {
+    session_regenerate_id(true);
+    $_SESSION["session_id"] = session_id();
+    header("Location:../views/home.php");
+    exit();
+}
 include("../views/header.php");
 ?>
 
 <div class="signin-container">
     <h2 class="signin-title">サインイン</h2>
-    <form class="signin-form" action="../controllers/sign_in.php" method="post">
+    <span id="err-mail" class="err-msg" style="display: none;"></span>
+    <form class="signin-form" id="mailSignInForm">
         <div>
-            <input type="email" name="uMail" id="uMail" placeholder="メールアドレス" required value="<?= $old["uMail"] ?>">
-            <!-- エラーメッセージが登録されていれば表示 -->
-            <?php if (!empty($errors['uMail'])): ?>
-                <span class="err-msg">
-                    <?= $errors['uMail'] ?>
-                </span>
-            <?php endif; ?>
+            <input id="email" name="email" placeholder="メールアドレス" type="email" required>
         </div>
         <div>
-            <input type="password" name="password" id="password" placeholder="パスワード" required>
-            <!-- エラーメッセージが登録されていれば表示 -->
-            <?php if (!empty($errors['password'])): ?>
-                <span class="err-msg">
-                    <?= $errors['password'] ?>
-                </span>
-            <?php endif; ?>
+            <input id="password" name="password" placeholder="パスワード" type="password" required>
         </div>
-        <button class="signin-btn">サインイン</button>
+        <button class="signin-btn" type="submit">サインイン</button>
     </form>
     <hr>
     <div class="signin-btn-group">
-        <a class="signin-btn">Googleで続ける</a>
-        <a class="signin-btn">GitHubで続ける</a>
+        <a class="signup-btn" id="btnGoogle">Googleで続ける</a>
+        <a class="signup-btn" id="btnGithub">GitHubで続ける</a>
     </div>
     <span>アカウントをお持ちでないですか？<a href="../views/sign_up.php">アカウントを作成</a></span>
+
+    <!-- PHPに送る用hiddenフォーム -->
+    <form id="postToPhpForm" action="../controllers/sign_in.php" method="post" style="display:none;">
+        <input type="hidden" name="firebase_uid" id="firebase_uid">
+        <input type="hidden" name="email" id="post_email">
+        <input type="hidden" name="display_name" id="post_display_name">
+        <input type="hidden" name="photo_url" id="post_photo_url">
+        <input type="hidden" name="provider" id="post_provider">
+    </form>
 </div>
+
+<!-- jQuery読み込み -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="module" src="../assets/js/firebase.js"></script>
 </body>
 
 </html>
