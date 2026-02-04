@@ -15,7 +15,12 @@ $provider = $_POST["provider"];
 $userModel->createUser($firebase_uid, $email, $display_name, $photo_url, $provider);
 
 // サインインユーザー情報を保持
-$_SESSION['session_id'] = session_id();
+$_SESSION["session_id"]    = session_id();
+$_SESSION["firebase_uid"]  = $firebase_uid;
+$_SESSION["email"]         = $email;
+$_SESSION["display_name"]  = $display_name;
+$_SESSION["photo_url"]     = $photo_url;
+$_SESSION["provider"]      = $provider;
 
 // ホーム画面に遷移
 header("Location:../views/home.php");
