@@ -4,42 +4,23 @@ session_start();
 include("../models/User.php");
 $userModel = new User();
 
-// サインインユーザー情報を取得
-$uId = $_SESSION['user']['uId'];
-
 //データ取得
-$uName = $_POST["uName"];
-$uMail = $_POST["uMail"];
+$firebase_uid = $_POST["firebase_uid"];
+$email = $_POST["email"];
+$display_name = $_POST["display_name"];
+$photo_url = $_POST["photo_url"];
+$provider = $_POST["provider"];
 
 // SQL実行
-$userModel->sameAddressUser($uId, $uMail);
+$userModel->createUser($firebase_uid, $email, $display_name, $photo_url, $provider);
 
-// 同一メールアドレスのレコードが存在する場合
-if ($record["count"] === 1) {
-    // 入力された情報を保持
-    $_SESSION['old'] = [
-        'uName' => $uName,
-        'uMail' => $uMail,
-    ];
-    // エラーメッセージを登録
-    $_SESSION['errors'] = [
-        'uMail' => 'このメールアドレスはすでに使用されています。',
-    ];
-    // アカウント設定画面再表示
-    header("Location:../views/account_update.php");
-    exit();
-}
-
-// SQL実行
-$userModel->updateUser($uId, $uName, $uMail);
-
-
-// サインインユーザー情報を更新
-$_SESSION['user']['uName'] = $uName;
-$_SESSION['user']['uMail'] = $uMail;
-
-// サクセスメッセージを登録
-$_SESSION['success'] = 'アカウント情報を更新しました';
+// サインインユーザー情報を保持
+$_SESSION["session_id"]    = session_id();
+$_SESSION["firebase_uid"]  = $firebase_uid;
+$_SESSION["email"]         = $email;
+$_SESSION["display_name"]  = $display_name;
+$_SESSION["photo_url"]     = $photo_url;
+$_SESSION["provider"]      = $provider;
 
 header("Location:../views/account_setting.php");
 exit();

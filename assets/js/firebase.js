@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, GithubAuthProvider, updateProfile, updateEmail, updatePassword, sendPasswordResetEmail, deleteUser } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, GithubAuthProvider, updateProfile, updateEmail, updatePassword, sendPasswordResetEmail, deleteUser, linkWithPopup } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -20,8 +20,6 @@ function postToPhp(user, provider) {
     $("#firebase_uid").val(user.uid);
     $("#post_email").val(user.email ?? "");
     $("#post_display_name").val(user.displayName ?? "");
-    console.log(user.photoURL);
-
     $("#post_photo_url").val(user.photoURL ?? "");
     $("#post_provider").val(provider);
     $("#postToPhpForm")[0].submit();
@@ -34,7 +32,7 @@ $(function () {
 
         e.preventDefault()
 
-        const displayName = $("#displayName").val();
+        const displayName = $("#display_name").val();
         const email = $("#email").val();
         const password = $("#password").val();
 
@@ -111,7 +109,7 @@ $(function () {
             console.log(err);
             if (err?.code === "auth/account-exists-with-different-credential") {
                 const cred = await signInWithPopup(auth, googleProvider);
-                
+
             }
             if (err?.code === "auth/email-already-in-use") {
                 $("#err-mail").text("すでに登録されているか、別の方法でログイン済みです。");
@@ -122,5 +120,16 @@ $(function () {
             $("#err-mail").css("display", "block");
             return
         }
+    });
+
+    // 更新
+    $("#accountUpdateForm").on("submit", async function (e) {
+        e.preventDefault()
+
+        const display_name = $("#display_name").val();
+
+        await updateProfile(auth.currentUser, { displayName: display_name })
+
+        postToPhp(auth.currentUser, "password");
     });
 })
